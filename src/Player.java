@@ -10,8 +10,8 @@ public class Player {
     private int currentLevel;
     private List<LifeLine> availableLifelines;
 
-    public Player(String name) {
-        this.name = name;
+    public Player() {
+        this.name = "";
         this.currentPrize = 0;
         this.currentLevel = 5;
         this.availableLifelines = new ArrayList<>();

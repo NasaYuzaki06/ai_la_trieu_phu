@@ -25,110 +25,143 @@ public class GameEngine {
         this.prizeManager = new PrizeManager();
     }
 
-    public void startGame() throws IOException, InterruptedException {
+    public void startGame() {
         gameUI.displayWelcomeMessage();
         this.gameStatus = GameStatus.PLAYING;
-        int currentQuestionNumber = player.getCurrentQuestionNumber();
         switch (gameUI.displayAndInputForStartGame()) {
             case 1:
                 questionRepository.loadQuestion();
-                int checkAppearAskTheAudience = 0; //
-                int checkAppearPhoneAFriend = 0; //
-                while (this.gameStatus == GameStatus.PLAYING) {
-                    boolean answered = false;
-                    Question currentQuestion = questionRepository.getQuestionByLevel(player.getCurrentLevel());
-                    while (!answered) {
-                        gameUI.clearScreen();// Xóa màn hình console
-                        if (currentQuestion != null) { // In câu hỏi và câu trả lời
-                            gameUI.displayQuestion(currentQuestion, prizeManager, player);
-                        }
-                        if (checkAppearAskTheAudience == 1) {
-                            player.getAvailableLifelines().get(1).use(currentQuestion, gameUI, player);
-                        }
-                        if (checkAppearPhoneAFriend == 1) {
-                            player.getAvailableLifelines().get(2).use(currentQuestion, gameUI, player);
-                        }
-                        checkAppearPhoneAFriend = 0;
-                        checkAppearAskTheAudience = 0;
-                        switch (gameUI.displayAndInputPlayerChoice()) {
-                            case 1:
-                                char answerChoice = gameUI.displayAndInputAnswerChoice(currentQuestion);
-                                assert currentQuestion != null;
-                                if (checkAnswer(answerChoice, currentQuestion)) {
-                                    player.setCurrentPrize(prizeManager.getPrizeForQuestion(currentQuestionNumber));
-                                    currentQuestionNumber++;
-                                    player.setCurrentQuestionNumber(currentQuestionNumber);
-                                    if (currentQuestionNumber > 10) {
-                                        player.setCurrentLevel(15);
-                                    } else if (currentQuestionNumber > 5) {
-                                        player.setCurrentLevel(10);
-                                    }
-                                    if (currentQuestionNumber > 15) {
-                                        gameUI.displayMessage("Chúc mừng bạn đã hoàn thành xuất sắc cuộc chơi 🤩 - Tiền thưởng của bạn là: ", player.getCurrentPrize());
-                                        this.gameStatus = GameStatus.WINNER;
-                                        answered = true;
-                                        break;
-                                    }
-                                    gameUI.displayMessage("Chúc mừng bạn đã trả lời chính xác 👏 - Tiền thưởng hiện tại của bạn là: ", player.getCurrentPrize());
-                                } else {
-                                    gameUI.displayMessage("Câu trả lời của bạn không chính xác 😆 - Tiền thưởng của bạn là: ", prizeManager.getMilestonePrizeOnFailure(currentQuestionNumber));
-                                    this.gameStatus = GameStatus.GAME_OVER;
-                                }
-                                answered = true;
-                                break;
-                            case 2:
-                                switch (gameUI.displayAndInputLifeLineChoice()) {
-                                    case 1:// 50:50
-                                        if (!player.getAvailableLifelines().getFirst().isUsed()) {
-                                            player.getAvailableLifelines().getFirst().use(currentQuestion, gameUI, player);
-                                        } else {
-                                            System.out.println("Bạn đã sử dụng quyền trợ giúp này rồi!!!🥲");
-                                        }
-                                        break;
-                                    case 2:// Ask the audience
-                                        if (!player.getAvailableLifelines().get(1).isUsed()) {
-                                            checkAppearAskTheAudience = 1;
-                                        } else {
-                                            System.out.println("Bạn đã sử dụng quyền trợ giúp này rồi!!!🥲");
-                                        }
-                                        break;
-                                    case 3:// Phone a friend
-                                        if (!player.getAvailableLifelines().get(2).isUsed()) {
-                                            checkAppearPhoneAFriend = 1;
-                                        } else {
-                                            System.out.println("Bạn đã sử dụng quyền trợ giúp này rồi!!!🥲");
-                                        }
-                                        break;
-                                }
-                                break;
-                            case 3:
-                                System.out.println("Bạn có chắc chắn muốn bỏ cuộc và nhận số tiền thưởng - " + prizeManager.getPrizeForQuestion(player.getCurrentQuestionNumber() - 1) + "🤔");
-                                switch (gameUI.displayAndInputGiveUpChoice()) {
-                                    case 1:
-                                        System.out.println("Tiền thưởng của bạn - " + prizeManager.getPrizeForQuestion(player.getCurrentQuestionNumber() - 1));
-                                        System.out.println("Hẹn gặp lại bạn lần sau 😊");
-                                        this.gameStatus = GameStatus.WALK_AWAY;
-                                        answered = true;
-                                        break;
-                                    case 2:
-                                        break;
-                                }
-                                break;
-                        }
-                    }
-
-                }
+                gameLoop();
                 break;
             case 2:
                 break;
         }
     }
 
-    public void gameLoop() {
-
+    private void inputPlayerName() {
+        
     }
 
-    public boolean checkAnswer(char answerChoice, Question currentQuestion) {
+    private void gameLoop() {
+        while (this.gameStatus == GameStatus.PLAYING) {
+            Question currentQuestion = questionRepository.getQuestionByLevel(player.getCurrentLevel());
+            boolean answered = false;
+
+            while (!answered) {
+//                gameUI.clearScreen();
+                gameUI.displayQuestion(currentQuestion, prizeManager, player);
+                int playerChoice = gameUI.displayAndInputPlayerChoice();
+                answered = handlePlayerChoice(playerChoice, currentQuestion);
+            }
+        }
+    }
+
+    private boolean handlePlayerChoice(int playerChoice, Question currentQuestion) {
+        switch (playerChoice) {
+            case 1:
+                return handleAnswer(currentQuestion);
+            case 2:
+                handleLifeLine(currentQuestion);
+                return false;
+            case 3:
+                return handleWalkAway();
+            default:
+                return false;
+        }
+    }
+
+    private boolean handleAnswer(Question currentQuestion) {
+        char answerChoice = gameUI.displayAndInputAnswerChoice(currentQuestion);
+        if (checkAnswer(answerChoice, currentQuestion)) {
+            updatePrizeAndLevel();
+        } else {
+            gameUI.displayMessage(
+                    "Câu trả lời của bạn không chính xác 😆 - Tiền thưởng của bạn là: ",
+                    prizeManager.getMilestonePrizeOnFailure(player.getCurrentQuestionNumber())
+            );
+            this.gameStatus = GameStatus.GAME_OVER;
+        }
+        return true;
+    }
+
+    private boolean handleWalkAway() {
+        long prize = prizeManager.getPrizeForQuestion(player.getCurrentQuestionNumber() - 1);
+        gameUI.displayMessage("Bạn có chắc chắn muốn bỏ cuộc? Tiền thưởng của bạn nhận được là: ", prize);
+        int choice = gameUI.displayAndInputGiveUpChoice();
+        if (choice == 1) {
+            gameUI.displayMessage("Tiền thưởng cuối cùng của bạn là: ", prize);
+            this.gameStatus = GameStatus.WALK_AWAY;
+            return true;
+        }
+        return false;
+    }
+
+    private void handleLifeLine(Question currentQuestion) {
+        int choice = gameUI.displayAndInputLifeLineChoice();
+        switch (choice) {
+            case 1:
+                useFiftyFifty(currentQuestion);
+                break;
+            case 2:
+                useAskTheAudience(currentQuestion);
+                break;
+            case 3:
+                usePhoneAFriend(currentQuestion);
+                break;
+            case 4:
+                break;
+        }
+    }
+
+    private void useFiftyFifty(Question currentQuestion) {
+        if (!player.getAvailableLifelines().getFirst().isUsed()) {
+            player.getAvailableLifelines().getFirst().use(currentQuestion, gameUI, player);
+        } else {
+            System.out.println("Bạn đã sử dụng quyền trợ giúp này rồi!");
+        }
+    }
+
+    private void useAskTheAudience(Question currentQuestion) {
+        if (!player.getAvailableLifelines().get(1).isUsed()) {
+            player.getAvailableLifelines().get(1).use(currentQuestion, gameUI, player);
+        } else {
+            System.out.println("Bạn đã sử dụng quyền trợ giúp này rồi!");
+        }
+    }
+
+    private void usePhoneAFriend(Question currentQuestion) {
+        if (!player.getAvailableLifelines().get(2).isUsed()) {
+            player.getAvailableLifelines().get(2).use(currentQuestion, gameUI, player);
+        } else {
+            System.out.println("Bạn đã sử dụng quyền trợ giúp này rồi!");
+        }
+    }
+
+    private void updatePrizeAndLevel() {
+        int currentQuestionNumber = player.getCurrentQuestionNumber();
+        player.setCurrentPrize(prizeManager.getPrizeForQuestion(currentQuestionNumber));
+        currentQuestionNumber++;
+        player.setCurrentQuestionNumber(currentQuestionNumber);
+
+        if (currentQuestionNumber > 10) {
+            player.setCurrentLevel(15);
+        } else if (currentQuestionNumber > 5) {
+            player.setCurrentLevel(10);
+        }
+        if (currentQuestionNumber > 15) {
+            this.gameStatus = GameStatus.WINNER;
+            gameUI.displayMessage(
+                    "Bạn đã chiến thắng toàn bộ game 🤩 - Tiền thưởng: ",
+                    player.getCurrentPrize());
+            return;
+        }
+        gameUI.displayMessage(
+                "Chúc mừng bạn đã trả lời chính xác 👏 - Tiền thưởng hiện tại của bạn là: ",
+                player.getCurrentPrize()
+        );
+    }
+
+    private boolean checkAnswer(char answerChoice, Question currentQuestion) {
         for (Answer answer : currentQuestion.getAnswer()) {
             if (answer.getOptionIdentifier() == answerChoice && answer.isCorrectAnswer()) {
                 return true;
@@ -136,5 +169,4 @@ public class GameEngine {
         }
         return false;
     }
-
 }

@@ -4,11 +4,31 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="652695a6-3e4d-4ba5-981c-7a5d2fc10880" name="Changes" comment="" />
+    <list default="true" id="652695a6-3e4d-4ba5-981c-7a5d2fc10880" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/out/production/ai_la_trieu_phu/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ai_la_trieu_phu/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ai_la_trieu_phu/src/AskTheAudience.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ai_la_trieu_phu/src/AskTheAudience.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ai_la_trieu_phu/src/DrawFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ai_la_trieu_phu/src/DrawFrame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ai_la_trieu_phu/src/FiftyFifty.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ai_la_trieu_phu/src/FiftyFifty.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ai_la_trieu_phu/src/GameEngine.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ai_la_trieu_phu/src/GameEngine.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ai_la_trieu_phu/src/GameStatus.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ai_la_trieu_phu/src/GameStatus.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ai_la_trieu_phu/src/GameUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ai_la_trieu_phu/src/GameUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ai_la_trieu_phu/src/LifeLine.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ai_la_trieu_phu/src/LifeLine.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ai_la_trieu_phu/src/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ai_la_trieu_phu/src/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ai_la_trieu_phu/src/PhoneAFriend.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ai_la_trieu_phu/src/PhoneAFriend.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ai_la_trieu_phu/src/QuestionRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ai_la_trieu_phu/src/QuestionRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameEngine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameEngine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/QuestionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/QuestionRepository.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
@@ -18,21 +38,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Main.executor": "Run",
-    "Application.main.executor": "Run",
-    "Application.test.executor": "Run",
-    "Application.testCountDown.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/bandu/OneDrive/Desktop/Báo cáo java/ai_la_trieu_phu",
-    "settings.editor.selected.configurable": "Errors"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.test.executor&quot;: &quot;Run&quot;,
+    &quot;Application.testCountDown.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/project_java/ai_la_trieu_phu&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;terminal&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="src.Main" />
@@ -62,6 +84,17 @@
       <updated>1760409041828</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -135,8 +135,12 @@ public class GameUI {
         return getCharInput(scanner, "Nhập đáp án của bạn: ", currentQuestion);
     }
 
-    public void clearScreen() throws IOException, InterruptedException {
-        new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+    public void clearScreen() {
+        try {
+            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+        } catch (IOException | InterruptedException e) {
+            System.out.println("Không thể xoá màn hình.");
+        }
     }
 
     public String displayPrizeFormat(long prize) {

@@ -15,7 +15,7 @@ public class Main {
         List<Question> questionList3 = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
 
-        Player player = new Player("Bình Dương");
+        Player player = new Player();
 
         QuestionRepository questionRepository = new QuestionRepository(questionList1, questionList2, questionList3);
         GameUI gameUI = new GameUI(scanner);
