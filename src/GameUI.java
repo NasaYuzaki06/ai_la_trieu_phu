@@ -9,6 +9,8 @@ import java.util.Scanner;
 public class GameUI {
     private Scanner scanner;
     private DrawFrame drawFrame;
+    private int[] audiencePollResult = null;
+    private String lifelineMessage = null;
 
     public GameUI(Scanner scanner) {
         this.scanner = scanner;
@@ -17,6 +19,14 @@ public class GameUI {
 
     public Scanner getScanner() {
         return scanner;
+    }
+
+    public void setAudiencePollResult(int[] audiencePollResult) {
+        this.audiencePollResult = audiencePollResult;
+    }
+
+    public void setLifelineMessage(String message) {
+        this.lifelineMessage = message;
     }
 
     // Kiểm tra dữ liệu người dùng
@@ -54,12 +64,34 @@ public class GameUI {
         }
     }
 
-    // Hiển thị câu hỏi, các câu trả lời, tiền thưởng, độ
+    // Hiển thị câu hỏi, các câu trả lời, tiền thưởng
     public void displayQuestion(Question questions, PrizeManager prizeManager, Player player) {
         drawFrame.drawBox(questions.getQuestionContent(), 
                 questions.getAnswer(),
                 prizeManager.getPrizeForQuestion(player.getCurrentQuestionNumber()),
                 player.getCurrentQuestionNumber());
+
+        if (this.audiencePollResult != null) {
+            System.out.println("Biểu đồ bình chọn của khán giả 📊");
+            if (this.audiencePollResult.length >= 4 && questions.getAnswer().size() >= 4) {
+                for (int i = 0; i < 4; i++) {
+                    char optionChar = questions.getAnswer().get(i).getOptionIdentifier();
+                    System.out.print("Đáp án " + optionChar + " - ");
+                    for (int j = 1; j <= this.audiencePollResult[i]; j++) {
+                        System.out.print("#");
+                    }
+                    System.out.println(" " + this.audiencePollResult[i] + "%");
+                }
+            }
+            System.out.println();
+            this.audiencePollResult = null;
+        }
+        if (this.lifelineMessage != null) {
+            System.out.println("🔔 THÔNG BÁO TRỢ GIÚP: " + this.lifelineMessage);
+            System.out.println();
+            this.lifelineMessage = null;
+        }
+
     }
 
     // Hiển thị lời chào và luật chơi
@@ -71,11 +103,12 @@ public class GameUI {
     public int displayAndInputForStartGame() {
         String menu = """
                 1. Bắt đầu chơi
-                2. Thoát game
+                2. Xem bảng xếp hạng
+                3. Thoát game
                 """;
         System.out.println(menu);
         int playerInput = getIntegerInput(scanner, "Nhập lựa chọn của bạn: ");
-        while (playerInput != 1 && playerInput != 2) {
+        while (playerInput != 1 && playerInput != 2 && playerInput != 3) {
             playerInput = getIntegerInput(scanner, "Nhập lựa chọn của bạn: ");
         }
         return playerInput;
@@ -146,10 +179,49 @@ public class GameUI {
     public String displayPrizeFormat(long prize) {
         return drawFrame.formatPrize(prize);
     }
+
+    public void displayRanking(PlayerManager playerManager) {
+        drawFrame.drawRanking(playerManager.getPlayerList());
+    }
 }
 
 class DrawFrame {
     public final int frameWidth = 100;
+
+    public void drawLineTable() {
+        for (int i = 1; i <= 48; i++) {
+            if (i == 16) {
+                System.out.print("|");
+                continue;
+            } else if (i == 27) {
+                System.out.print("|");
+                continue;
+            } else if (i == 48) {
+                System.out.print("|");
+                continue;
+            } else if (i == 1) {
+                System.out.print("|");
+            }
+            System.out.print("-");
+        }
+    }
+
+    public void drawRanking(List<Player> playerList) {
+        System.out.println(" ================ BẢNG XẾP HẠNG ================");
+        System.out.println();
+        drawLineTable();
+        System.out.printf("\n|%-15s|%-10s|%-20s|\n", "Tên người chơi", "Câu hỏi", "Tiền thưởng");
+        drawLineTable();
+        for (int i = 0; i < playerList.size(); i++) {
+            System.out.printf("\n|%-15s|%-10d|%-20d|\n", playerList.get(i).getName(),
+                    playerList.get(i).getCurrentQuestionNumber(),
+                    playerList.get(i).getCurrentPrize());
+            if (i != playerList.size() - 1) {
+                drawLineTable();
+            }
+        }
+        drawLineTable();
+    }
 
     // In khung của câu hỏi
     public void drawBox(String questionContent, List<Answer> answers, long prize, int currentQuestionNumber) {

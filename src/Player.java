@@ -21,6 +21,12 @@ public class Player {
         this.currentQuestionNumber = 1;
     }
 
+    public Player(String name, int currentQuestionNumber, long currentPrize) {
+        this.name = name;
+        this.currentQuestionNumber = currentQuestionNumber;
+        this.currentPrize = currentPrize;
+    }
+
     public String getName() {
         return name;
     }

@@ -16,6 +16,7 @@ public class GameEngine {
     private GameUI gameUI;
     private Player player;
     private PrizeManager prizeManager;
+    private PlayerManager playerManager;
     private QuestionRepository questionRepository;
 
     public GameEngine(GameUI gameUI, Player player, QuestionRepository questionRepository) {
@@ -23,6 +24,7 @@ public class GameEngine {
         this.player = player;
         this.questionRepository = questionRepository;
         this.prizeManager = new PrizeManager();
+        this.playerManager = new PlayerManager();
     }
 
     public void startGame() {
@@ -30,23 +32,29 @@ public class GameEngine {
         this.gameStatus = GameStatus.PLAYING;
         switch (gameUI.displayAndInputForStartGame()) {
             case 1:
+                inputPlayerName();
                 questionRepository.loadQuestion();
                 gameLoop();
                 break;
             case 2:
+                playerManager.loadPlayerScore();
+                gameUI.clearScreen();
+                gameUI.displayRanking(playerManager);
+            case 3:
                 break;
         }
     }
 
-    private void inputPlayerName() {
-        
+    public void inputPlayerName() {
+        System.out.print("Nhập tên của bạn: ");
+        String playerName = gameUI.getScanner().nextLine();
+        player.setName(playerName);
     }
 
     private void gameLoop() {
         while (this.gameStatus == GameStatus.PLAYING) {
             Question currentQuestion = questionRepository.getQuestionByLevel(player.getCurrentLevel());
             boolean answered = false;
-
             while (!answered) {
 //                gameUI.clearScreen();
                 gameUI.displayQuestion(currentQuestion, prizeManager, player);
@@ -57,17 +65,15 @@ public class GameEngine {
     }
 
     private boolean handlePlayerChoice(int playerChoice, Question currentQuestion) {
-        switch (playerChoice) {
-            case 1:
-                return handleAnswer(currentQuestion);
-            case 2:
+        return switch (playerChoice) {
+            case 1 -> handleAnswer(currentQuestion);
+            case 2 -> {
                 handleLifeLine(currentQuestion);
-                return false;
-            case 3:
-                return handleWalkAway();
-            default:
-                return false;
-        }
+                yield false;
+            }
+            case 3 -> handleWalkAway();
+            default -> false;
+        };
     }
 
     private boolean handleAnswer(Question currentQuestion) {
@@ -75,10 +81,10 @@ public class GameEngine {
         if (checkAnswer(answerChoice, currentQuestion)) {
             updatePrizeAndLevel();
         } else {
+            long prize = prizeManager.getMilestonePrizeOnFailure(player.getCurrentQuestionNumber());
             gameUI.displayMessage(
-                    "Câu trả lời của bạn không chính xác 😆 - Tiền thưởng của bạn là: ",
-                    prizeManager.getMilestonePrizeOnFailure(player.getCurrentQuestionNumber())
-            );
+                    "Câu trả lời của bạn không chính xác 😆 - Tiền thưởng của bạn là: ", prize);
+            playerManager.savePlayerScore(player.getName(), player.getCurrentQuestionNumber() - 1, prize);
             this.gameStatus = GameStatus.GAME_OVER;
         }
         return true;
@@ -90,6 +96,7 @@ public class GameEngine {
         int choice = gameUI.displayAndInputGiveUpChoice();
         if (choice == 1) {
             gameUI.displayMessage("Tiền thưởng cuối cùng của bạn là: ", prize);
+            playerManager.savePlayerScore(player.getName(), player.getCurrentQuestionNumber() - 1, player.getCurrentPrize());
             this.gameStatus = GameStatus.WALK_AWAY;
             return true;
         }
@@ -150,6 +157,7 @@ public class GameEngine {
         }
         if (currentQuestionNumber > 15) {
             this.gameStatus = GameStatus.WINNER;
+            playerManager.savePlayerScore(player.getName(), player.getCurrentQuestionNumber() - 1, player.getCurrentPrize());
             gameUI.displayMessage(
                     "Bạn đã chiến thắng toàn bộ game 🤩 - Tiền thưởng: ",
                     player.getCurrentPrize());

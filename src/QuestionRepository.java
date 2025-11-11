@@ -14,12 +14,10 @@ public class QuestionRepository {
     private List<Question> questionsWithDifficultyLevel15;
 
 //    Hàm khởi tạo
-    public QuestionRepository(List<Question> questionsWithDifficultyLevel5,
-                              List<Question> questionsWithDifficultyLevel10,
-                              List<Question> questionsWithDifficultyLevel15) {
-        this.questionsWithDifficultyLevel5 = questionsWithDifficultyLevel5;
-        this.questionsWithDifficultyLevel10 = questionsWithDifficultyLevel10;
-        this.questionsWithDifficultyLevel15 = questionsWithDifficultyLevel15;
+    public QuestionRepository() {
+        this.questionsWithDifficultyLevel5 = new ArrayList<>();
+        this.questionsWithDifficultyLevel10 = new ArrayList<>();
+        this.questionsWithDifficultyLevel15 = new ArrayList<>();
     }
 
     // Phương thức

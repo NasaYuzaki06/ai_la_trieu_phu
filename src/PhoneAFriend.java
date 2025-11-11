@@ -20,10 +20,10 @@ public class PhoneAFriend implements LifeLine {
     public int getRateByLevel(int currentLevel) {
         int success = 0;
         if (currentLevel == 5) {
-            success = 80;
+            success = 90;
             return success;
         } else if (currentLevel == 10) {
-            success = 50;
+            success = 60;
             return success;
         } else {
             success = 20;
@@ -35,15 +35,25 @@ public class PhoneAFriend implements LifeLine {
     public void use(Question question, GameUI gameUI, Player player) {
         Random random = new Random();
         int randomRate = random.nextInt(101);
+        String friendMessage;
         if (randomRate <= getRateByLevel(player.getCurrentLevel())) {
-            System.out.println("Người thân của bạn đã đưa ra đáp án " + question.getAnswer().get(getCorrectAnswerIndex(question)).getOptionIdentifier());
+            char correctOption = question.getAnswer().get(getCorrectAnswerIndex(question)).getOptionIdentifier();
+            friendMessage = "Người thân của bạn rất chắc chắn! Họ chọn đáp án " + correctOption;
         } else {
+            Answer wrongAnswer = null;
             for (Answer ans : question.getAnswer()) {
                 if (!ans.isCorrectAnswer()) {
-                    System.out.println("Người thân của bạn đã đưa ra đáp án: " + ans.getOptionIdentifier());
+                    wrongAnswer = ans;
+                    break;
                 }
             }
+            if (wrongAnswer != null) {
+                friendMessage = "Người thân của bạn hơi phân vân và đoán là đáp án: " + wrongAnswer.getOptionIdentifier();
+            } else {
+                friendMessage = "Người thân của bạn không biết câu trả lời!";
+            }
         }
+        gameUI.setLifelineMessage(friendMessage);
         this.isUsed = true;
     }
     @Override

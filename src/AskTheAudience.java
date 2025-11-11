@@ -65,21 +65,7 @@ public class AskTheAudience implements LifeLine {
             }
         }
         int[] answerRate = getWeightByLevel(currentCorrectIndexAnswer, player.getCurrentLevel());
-
-        System.out.println("Biểu đồ bình chọn của khán giả 📊");
-
-        for (int i = 0; i < answerRate.length; i++) {
-            for (int j = 1; j <= answerRate[i]; j++) {
-                if (j == 1) {
-                    System.out.print("Đáp án " + currentQuestion.getAnswer().get(i).getOptionIdentifier() + " - ");
-                }
-                System.out.print("#");
-                if (j == answerRate[i]) {
-                    System.out.print(" " + answerRate[i] + "%");
-                }
-            }
-            System.out.println();
-        }
+        gameUI.setAudiencePollResult(answerRate);
         this.isUsed = true;
     }
     @Override

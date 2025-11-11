@@ -23,7 +23,7 @@ public class FiftyFifty implements LifeLine {
             );
 
             this.isUsed = true;
-            gameUI.displayMessage("Hai phương án sai đã được loại bỏ.");
+            gameUI.setLifelineMessage("Hai phương án sai đã được loại bỏ.");
         }
     }
     @Override
